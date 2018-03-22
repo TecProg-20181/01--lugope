@@ -100,22 +100,22 @@ void blur(unsigned int h, unsigned int w, Pixel pixel[512][512], int diametro_bl
     }
 }
 
-// Image rotacionar90direita(Image img) {
-//     Image rotacionada;
+Image rotacionar90direita(Image img) {
+    Image rotacionada;
 
-//     rotacionada.w = img.h;
-//     rotacionada.h = img.w;
+    rotacionada.w = img.h;
+    rotacionada.h = img.w;
 
-//     for (unsigned int i = 0, y = 0; i < rotacionada.h; ++i, ++y) {
-//         for (int j = rotacionada.w - 1, x = 0; j >= 0; --j, ++x) {
-//             rotacionada.pixel[i][j][0] = img.pixel[x][y][0];
-//             rotacionada.pixel[i][j][1] = img.pixel[x][y][1];
-//             rotacionada.pixel[i][j][2] = img.pixel[x][y][2];
-//         }
-//     }
+    for (unsigned int i = 0, y = 0; i < rotacionada.h; ++i, ++y) {
+        for (int j = rotacionada.w - 1, x = 0; j >= 0; --j, ++x) {
+            rotacionada.pixel[i][j].r = img.pixel[x][y].r;
+            rotacionada.pixel[i][j].g = img.pixel[x][y].g;
+            rotacionada.pixel[i][j].b = img.pixel[x][y].b;
+        }
+    }
 
-//     return rotacionada;
-// }
+    return rotacionada;
+}
 
 // void inverter_cores(unsigned short int pixel[512][512][3],
 //                     unsigned int w, unsigned int h) {
@@ -210,12 +210,13 @@ int main() {
                 break;
             }
             case 4: { // Rotacao
-                // int quantas_vezes = 0;
-                // scanf("%d", &quantas_vezes);
-                // quantas_vezes %= 4;
-                // for (int j = 0; j < quantas_vezes; ++j) {
-                //     img = rotacionar90direita(img);
-                // }
+                int quantas_vezes = 0;
+                scanf("%d", &quantas_vezes);
+                quantas_vezes %= 4;
+                
+                for (int j = 0; j < quantas_vezes; ++j) {
+                    img = rotacionar90direita(img);
+                }
                 break;
             }
             case 5: { // Espelhamento
