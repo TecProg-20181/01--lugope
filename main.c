@@ -18,11 +18,22 @@ typedef struct _image {
     unsigned int h;
 } Image;
 
-
 int max(int a, int b) {
-    if (a > b)
+    if (a > b){
         return a;
-    return b;
+
+    } else {
+        return b;
+    }
+}
+
+int min(int a, int b) {
+    if (a < b){
+        return a;
+
+    } else {
+        return b;
+    }
 }
 
 int pixel_igual(Pixel p1, Pixel p2) {
@@ -56,29 +67,28 @@ Image escala_de_cinza(Image img) {
     return img;
 }
 
-void blur(unsigned int h, unsigned short int pixel[512][512][3], int T, unsigned int w) {
-    for (unsigned int i = 0; i < h; ++i) {
-        for (unsigned int j = 0; j < w; ++j) {
+void blur(unsigned int h, unsigned int w, unsigned short int pixel[512][512][3], int tamanho_blur) {
+    for (unsigned int linha = 0; linha < h; ++linha) {
+        for (unsigned int coluna = 0; coluna < w; ++coluna) {
             Pixel media = {0, 0, 0};
 
-            int menor_h = (h - 1 > i + T/2) ? i + T/2 : h - 1;
-            int min_w = (w - 1 > j + T/2) ? j + T/2 : w - 1;
-            for(int x = (0 > i - T/2 ? 0 : i - T/2); x <= menor_h; ++x) {
-                for(int y = (0 > j - T/2 ? 0 : j - T/2); y <= min_w; ++y) {
+            int menor_h = (h - 1 > linha + tamanho_blur/2) ? linha + tamanho_blur/2 : h - 1;
+            int min_w = (w - 1 > coluna + tamanho_blur/2) ? coluna + tamanho_blur/2 : w - 1;
+            for(int x = (0 > linha - tamanho_blur/2 ? 0 : linha - tamanho_blur/2); x <= menor_h; ++x) {
+                for(int y = (0 > coluna - tamanho_blur/2 ? 0 : coluna - tamanho_blur/2); y <= min_w; ++y) {
                     media.r += pixel[x][y][0];
                     media.g += pixel[x][y][1];
                     media.b += pixel[x][y][2];
                 }
             }
 
-            // printf("%u", media.r)
-            media.r /= T * T;
-            media.g /= T * T;
-            media.b /= T * T;
+            media.r /= tamanho_blur * tamanho_blur;
+            media.g /= tamanho_blur * tamanho_blur;
+            media.b /= tamanho_blur * tamanho_blur;
 
-            pixel[i][j][0] = media.r;
-            pixel[i][j][1] = media.g;
-            pixel[i][j][2] = media.b;
+            pixel[linha][coluna][0] = media.r;
+            pixel[linha][coluna][1] = media.g;
+            pixel[linha][coluna][2] = media.b;
         }
     }
 }
@@ -189,7 +199,7 @@ int main() {
             case 3: { // Blur
                 int tamanho = 0;
                 scanf("%d", &tamanho);
-                blur(img.h, img.pixel, tamanho, img.w);
+                blur(img.h, img.w, img.pixel, tamanho);
                 break;
             }
             case 4: { // Rotacao
