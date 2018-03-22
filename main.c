@@ -1,3 +1,5 @@
+// gcc main.c -o photopobre.exe -W -Wall -Wshadow -pedantic
+
 #include <stdio.h>
 
 typedef struct _pixel {
