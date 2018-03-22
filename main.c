@@ -47,27 +47,23 @@ int pixel_igual(Pixel p1, Pixel p2) {
 }
 
 
-// Image escala_de_cinza(Image img) {
-//     /*for (unsigned int i = 0; i < img.h; ++i) {
-//         for (unsigned int j = 0; j < img.w; ++j) {
-//             print("%u", img.pixel[i][j][0] + img.pixel[i][j][1] + img.pixel[i][j][2]);
-//         }
-//     }*/
+Image escala_de_cinza(Image img) {
+    //Percorre todos os pixels da imagem
+    for (unsigned int i = 0; i < img.h; ++i) {
+        for (unsigned int j = 0; j < img.w; ++j) {
+            int media = img.pixel[i][j].r +
+                        img.pixel[i][j].g +
+                        img.pixel[i][j].b;
+            media /= 3;
 
-//     for (unsigned int i = 0; i < img.h; ++i) {
-//         for (unsigned int j = 0; j < img.w; ++j) {
-//             int media = img.pixel[i][j][0] +
-//                         img.pixel[i][j][1] +
-//                         img.pixel[i][j][2];
-//             media /= 3;
-//             img.pixel[i][j][0] = media;
-//             img.pixel[i][j][1] = media;
-//             img.pixel[i][j][2] = media;
-//         }
-//     }
+            img.pixel[i][j].r = media;
+            img.pixel[i][j].g = media;
+            img.pixel[i][j].b = media;
+        }
+    }
 
-//     return img;
-// }
+    return img;
+}
 
 void blur(unsigned int h, unsigned int w, Pixel pixel[512][512], int diametro_blur) {
     //Percorre cada pixel da imagem
@@ -180,7 +176,7 @@ int main() {
 
         switch(opcao) {
             case 1: { // Escala de Cinza
-                // img = escala_de_cinza(img);
+                img = escala_de_cinza(img);
                 break;
             }
             case 2: { // Filtro Sepia
