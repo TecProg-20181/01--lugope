@@ -47,22 +47,22 @@ int pixel_igual(Pixel p1, Pixel p2) {
 }
 
 
-Image escala_de_cinza(Image image_cinza) {
+void escala_de_cinza(Image* imagem) {
     //Percorre todos os pixels da imagem
-    for (unsigned int i = 0; i < image_cinza.h; ++i) {
-        for (unsigned int j = 0; j < image_cinza.w; ++j) {
-            int media = image_cinza.pixel[i][j].r +
-                        image_cinza.pixel[i][j].g +
-                        image_cinza.pixel[i][j].b;
+    for (unsigned int i = 0; i < imagem->h; ++i) {
+        for (unsigned int j = 0; j < imagem->w; ++j) {
+            int media = imagem->pixel[i][j].r +
+                        imagem->pixel[i][j].g +
+                        imagem->pixel[i][j].b;
             media /= 3;
 
-            image_cinza.pixel[i][j].r = media;
-            image_cinza.pixel[i][j].g = media;
-            image_cinza.pixel[i][j].b = media;
+            imagem->pixel[i][j].r = media;
+            imagem->pixel[i][j].g = media;
+            imagem->pixel[i][j].b = media;
         }
     }
 
-    return image_cinza;
+    // return image_cinza;
 
     // Image test;
     // for (unsigned int i = 0; i < img.h; ++i) {
@@ -78,29 +78,27 @@ Image escala_de_cinza(Image image_cinza) {
     // return image_cinza;
 }
 
-Image filtro_sepia(Image nova_imagem) {
+void filtro_sepia(Image* imagem) {
     //Percorre todos os pixels da imagem
-    for (unsigned int x = 0; x < nova_imagem.h; ++x) {
-        for (unsigned int y = 0; y < nova_imagem.w; ++y) {
+    for (unsigned int x = 0; x < imagem->h; ++x) {
+        for (unsigned int y = 0; y < imagem->w; ++y) {
             //Pixel sepia
-            Pixel pixel = nova_imagem.pixel[x][y];
+            Pixel pixel = imagem->pixel[x][y];
 
             //Defini tom sepia do pixel
             int p =  pixel.r * .393 + pixel.g * .769 + pixel.b * .189;
             int menor_r = (255 >  p) ? p : 255;
-            nova_imagem.pixel[x][y].r = menor_r;
+            imagem->pixel[x][y].r = menor_r;
 
             p =  pixel.r * .349 + pixel.g * .686 + pixel.b * .168;
             menor_r = (255 >  p) ? p : 255;
-            nova_imagem.pixel[x][y].g = menor_r;
+            imagem->pixel[x][y].g = menor_r;
 
             p =  pixel.r * .272 + pixel.g * .534 + pixel.b * .131;
             menor_r = (255 >  p) ? p : 255;
-            nova_imagem.pixel[x][y].b = menor_r;
+            imagem->pixel[x][y].b = menor_r;
         }
     }
-
-    return nova_imagem;
 }
 
 Image blur(Image imagem_blur, int diametro_blur) {
@@ -142,20 +140,20 @@ Image blur(Image imagem_blur, int diametro_blur) {
 }
 
 Image rotacionar90direita(Image img) {
-    Image rotacionada;
+    // Image* nova_imagem = NULL;
 
-    rotacionada.w = img.h;
-    rotacionada.h = img.w;
+    // nova_imagem.w = img.h;
+    // nova_imagem.h = img.w;
 
-    for (unsigned int i = 0, y = 0; i < rotacionada.h; ++i, ++y) {
-        for (int j = rotacionada.w - 1, x = 0; j >= 0; --j, ++x) {
-            rotacionada.pixel[i][j].r = img.pixel[x][y].r;
-            rotacionada.pixel[i][j].g = img.pixel[x][y].g;
-            rotacionada.pixel[i][j].b = img.pixel[x][y].b;
-        }
-    }
+    // for (unsigned int i = 0, y = 0; i < nova_imagem.h; ++i, ++y) {
+    //     for (int j = nova_imagem.w - 1, x = 0; j >= 0; --j, ++x) {
+    //         nova_imagem.pixel[i][j].r = img.pixel[x][y].r;
+    //         nova_imagem.pixel[i][j].g = img.pixel[x][y].g;
+    //         nova_imagem.pixel[i][j].b = img.pixel[x][y].b;
+    //     }
+    // }
 
-    return rotacionada;
+    return img;
 }
 
 // void inverter_cores(unsigned short int pixel[512][512][3],
@@ -185,7 +183,6 @@ Image rotacionar90direita(Image img) {
 
 //     return cortada;
 // }
-
 
 int main() {
     Image img;
@@ -217,22 +214,34 @@ int main() {
 
         switch(opcao) {
             case 1: { // Escala de Cinza
-                // img = escala_de_cinza(img);
+                escala_de_cinza(&img);
+
                 break;
             }
             case 2: { // Filtro Sepia
-                img = filtro_sepia(img);
+                filtro_sepia(&img);
 
                 break;
             }
             case 3: { // Blur
-                int tamanho = 0;
-                scanf("%d", &tamanho);
+                // int tamanho = 0;
+                // scanf("%d", &tamanho);
                 // img = blur(img, tamanho);
-                img = blur(img, tamanho);
+
                 break;
             }
             case 4: { // Rotacao
+                // int quantas_vezes = 0;
+                // scanf("%d", &quantas_vezes);
+                // quantas_vezes %= 4;
+
+                // for (int j = 0; j < quantas_vezes; ++j) {
+                //     img = rotacionar90direita(img);
+                // }
+
+                break;
+            }
+            case 5: { // Espelhamento
                 int quantas_vezes = 0;
                 scanf("%d", &quantas_vezes);
                 quantas_vezes %= 4;
@@ -240,9 +249,7 @@ int main() {
                 for (int j = 0; j < quantas_vezes; ++j) {
                     img = rotacionar90direita(img);
                 }
-                break;
-            }
-            case 5: { // Espelhamento
+
                 // int horizontal = 0;
                 // scanf("%d", &horizontal);
 
@@ -285,6 +292,9 @@ int main() {
                 // scanf("%d %d", &w, &h);
 
                 // img = cortar_imagem(img, x, y, w, h);
+                break;
+            }
+            default: {
                 break;
             }
         }
