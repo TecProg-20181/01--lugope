@@ -1,6 +1,8 @@
 // gcc main.c -o photopobre.exe -W -Wall -Wshadow -pedantic
+// teste: cat lena.ppm entrada.txt | ./photopobre.exe > saida.ppm
 
 #include <stdio.h>
+#include <math.h>
 
 typedef struct _pixel {
     unsigned short int r;
@@ -67,25 +69,34 @@ Image escala_de_cinza(Image img) {
     return img;
 }
 
-void blur(unsigned int h, unsigned int w, unsigned short int pixel[512][512][3], int tamanho_blur) {
+void blur(unsigned int h, unsigned int w, unsigned short int pixel[512][512][3], int diametro_blur) {
+    //Percorre cada pixel da imagem
     for (unsigned int linha = 0; linha < h; ++linha) {
         for (unsigned int coluna = 0; coluna < w; ++coluna) {
+            //Variáveis
             Pixel media = {0, 0, 0};
+            int h_anterior = h - 1;
+            int w_anterior = w - 1;
+            int raio_blur = diametro_blur/2;
 
-            int menor_h = (h - 1 > linha + tamanho_blur/2) ? linha + tamanho_blur/2 : h - 1;
-            int min_w = (w - 1 > coluna + tamanho_blur/2) ? coluna + tamanho_blur/2 : w - 1;
-            for(int x = (0 > linha - tamanho_blur/2 ? 0 : linha - tamanho_blur/2); x <= menor_h; ++x) {
-                for(int y = (0 > coluna - tamanho_blur/2 ? 0 : coluna - tamanho_blur/2); y <= min_w; ++y) {
-                    media.r += pixel[x][y][0];
-                    media.g += pixel[x][y][1];
-                    media.b += pixel[x][y][2];
+            int menor_h = min( h_anterior, (linha + raio_blur) ); //Evita passar da borda de baixo da imagem
+            int menor_w = min( w_anterior, (coluna + raio_blur) ); //Evita passar da borda direita da imagem
+
+            //Faz as somm das cores dos pixels no primeiro quadrante do pixel base
+            for(int y = max(0, linha - raio_blur); y <= menor_h; ++y) {
+                for(int x = max(0, coluna - raio_blur); x <= menor_w; ++x) {
+                    media.r += pixel[y][x][0];
+                    media.g += pixel[y][x][1];
+                    media.b += pixel[y][x][2];
                 }
             }
 
-            media.r /= tamanho_blur * tamanho_blur;
-            media.g /= tamanho_blur * tamanho_blur;
-            media.b /= tamanho_blur * tamanho_blur;
+            //Define a média das cores na área de blur
+            media.r /= pow(diametro_blur,2);
+            media.g /= pow(diametro_blur,2);
+            media.b /= pow(diametro_blur,2);
 
+            //Define nova cor do pixel como a média das cores na área do blur
             pixel[linha][coluna][0] = media.r;
             pixel[linha][coluna][1] = media.g;
             pixel[linha][coluna][2] = media.b;
