@@ -175,16 +175,15 @@ void espelhar(Image* imagem, unsigned short int eixo) {
     }
 }
 
-// void inverter_cores(unsigned short int pixel[512][512][3],
-//                     unsigned int w, unsigned int h) {
-//     for (unsigned int i = 0; i < h; ++i) {
-//         for (unsigned int j = 0; j < w; ++j) {
-//             pixel[i][j][0] = 255 - pixel[i][j][0];
-//             pixel[i][j][1] = 255 - pixel[i][j][1];
-//             pixel[i][j][2] = 255 - pixel[i][j][2];
-//         }
-//     }
-// }
+void inverter_cores(Image* imagem) {
+    for (unsigned int i = 0; i < imagem->h; ++i) {
+        for (unsigned int j = 0; j < imagem->w; ++j) {
+            imagem->pixel[i][j].r = 255 - imagem->pixel[i][j].r;
+            imagem->pixel[i][j].g = 255 - imagem->pixel[i][j].g;
+            imagem->pixel[i][j].b = 255 - imagem->pixel[i][j].b;
+        }
+    }
+}
 
 // Image cortar_imagem(Image img, int x, int y, int w, int h) {
 //     Image cortada;
@@ -268,7 +267,7 @@ int main() {
                 break;
             }
             case 6: { // Inversao de Cores
-                // inverter_cores(img.pixel, img.w, img.h);
+                inverter_cores(&img);
                 break;
             }
             case 7: { // Cortar Imagem
