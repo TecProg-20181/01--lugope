@@ -61,21 +61,6 @@ void escala_de_cinza(Image* imagem) {
             imagem->pixel[i][j].b = media;
         }
     }
-
-    // return image_cinza;
-
-    // Image test;
-    // for (unsigned int i = 0; i < img.h; ++i) {
-    //     for (unsigned int j = 0; j < img.w; ++j) {
-    //         img.pixel[i][j].r = img.pixel[1][j].r;
-    //         img.pixel[i][j].g = img.pixel[1][j].g;
-    //         img.pixel[i][j].b = img.pixel[1][j].b;
-    //     }
-    // }
-
-    // Image imp = image_cinza;
-
-    // return image_cinza;
 }
 
 void filtro_sepia(Image* imagem) {
@@ -85,7 +70,7 @@ void filtro_sepia(Image* imagem) {
             //Pixel sepia
             Pixel pixel = imagem->pixel[x][y];
 
-            //Defini tom sepia do pixel
+            //Define tom sepia do pixel
             int p =  pixel.r * .393 + pixel.g * .769 + pixel.b * .189;
             int menor_r = (255 >  p) ? p : 255;
             imagem->pixel[x][y].r = menor_r;
@@ -139,18 +124,54 @@ void blur(Image* imagem, int diametro_blur) {
 void rotacionar90direita(Image* imagem) {
     Image img_auxiliar = *imagem;
 
+    //Troca a largura e a autura
     img_auxiliar.w = imagem->h;
     img_auxiliar.h = imagem->w;
 
-    for (unsigned int i = 0, y = 0; i < img_auxiliar.h; ++i, ++y) {
+    //Desenha a nova imagem na variável auxiliar
+    for (unsigned int i = 0; i < img_auxiliar.h; ++i) {
         for (int j = img_auxiliar.w - 1, x = 0; j >= 0; --j, ++x) {
-            img_auxiliar.pixel[i][j].r = imagem->pixel[x][y].r;
-            img_auxiliar.pixel[i][j].g = imagem->pixel[x][y].g;
-            img_auxiliar.pixel[i][j].b = imagem->pixel[x][y].b;
+            img_auxiliar.pixel[i][j].r = imagem->pixel[x][i].r;
+            img_auxiliar.pixel[i][j].g = imagem->pixel[x][i].g;
+            img_auxiliar.pixel[i][j].b = imagem->pixel[x][i].b;
         }
     }
 
+    //Transfere a nova imagem
     *imagem = img_auxiliar;
+}
+
+void espelhar(Image* imagem, unsigned short int eixo) {
+    int w = imagem->w, h = imagem->h;
+
+    if (eixo == 1) { //Vertical
+        w /= 2;
+
+    } else { //Horizontal
+        h /= 2;
+    }
+
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < w; ++j) {
+            int x = i, y = j;
+
+            if (eixo == 1){ //Vertical
+                y = imagem->w - j;
+                y -= 1;
+
+            } else { //Horizontal
+                x = imagem->h - i;
+                x -= 1;
+            }
+
+            //Faz a troca de pixel
+            Pixel pixel_auxiliar;
+
+            pixel_auxiliar = imagem->pixel[i][j];
+            imagem->pixel[i][j] = imagem->pixel[x][y];
+            imagem->pixel[x][y] = pixel_auxiliar;
+        }
+    }
 }
 
 // void inverter_cores(unsigned short int pixel[512][512][3],
@@ -239,35 +260,10 @@ int main() {
                 break;
             }
             case 5: { // Espelhamento
-                // int horizontal = 0;
-                // scanf("%d", &horizontal);
+                unsigned short int eixo = 0;
+                scanf("%hu", &eixo);
+                espelhar(&img, eixo);
 
-                // int w = img.w, h = img.h;
-
-                // if (horizontal == 1) w /= 2;
-                // else h /= 2;
-
-                // for (int i2 = 0; i2 < h; ++i2) {
-                //     for (int j = 0; j < w; ++j) {
-                //         int x = i2, y = j;
-
-                //         if (horizontal == 1) y = img.w - 1 - j;
-                //         else x = img.h - 1 - i2;
-
-                //         Pixel aux1;
-                //         aux1.r = img.pixel[i2][j][0];
-                //         aux1.g = img.pixel[i2][j][1];
-                //         aux1.b = img.pixel[i2][j][2];
-
-                //         img.pixel[i2][j][0] = img.pixel[x][y][0];
-                //         img.pixel[i2][j][1] = img.pixel[x][y][1];
-                //         img.pixel[i2][j][2] = img.pixel[x][y][2];
-
-                //         img.pixel[x][y][0] = aux1.r;
-                //         img.pixel[x][y][1] = aux1.g;
-                //         img.pixel[x][y][2] = aux1.b;
-                //     }
-                // }
                 break;
             }
             case 6: { // Inversao de Cores
