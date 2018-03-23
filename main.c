@@ -185,22 +185,22 @@ void inverter_cores(Image* imagem) {
     }
 }
 
-// Image cortar_imagem(Image img, int x, int y, int w, int h) {
-//     Image cortada;
+void cortar_imagem(Image* imagem, int x, int y, int nova_largura, int nova_altura) {
+    Image imagem_cortada;
 
-//     cortada.w = w;
-//     cortada.h = h;
+    imagem_cortada.w = nova_largura;
+    imagem_cortada.h = nova_altura;
 
-//     for(int i = 0; i < h; ++i) {
-//         for(int j = 0; j < w; ++j) {
-//             cortada.pixel[i][j][0] = img.pixel[i + y][j + x][0];
-//             cortada.pixel[i][j][1] = img.pixel[i + y][j + x][1];
-//             cortada.pixel[i][j][2] = img.pixel[i + y][j + x][2];
-//         }
-//     }
+    //Desenha nova imagem dentro dos parâmetros de corte
+    for(int i = 0; i < nova_altura; ++i) {
+        for(int j = 0; j < nova_largura; ++j) {
+            imagem_cortada.pixel[i][j] = imagem->pixel[i + y][j + x];
+        }
+    }
 
-//     return cortada;
-// }
+    //Define nova imagem
+    *imagem = imagem_cortada;
+}
 
 int main() {
     Image img;
@@ -271,12 +271,12 @@ int main() {
                 break;
             }
             case 7: { // Cortar Imagem
-                // int x, y;
-                // scanf("%d %d", &x, &y);
-                // int w, h;
-                // scanf("%d %d", &w, &h);
+                int posicao_x, posicao_y;
+                scanf("%d %d", &posicao_x, &posicao_y);
+                int nova_largura, nova_altura;
+                scanf("%d %d", &nova_largura, &nova_altura);
 
-                // img = cortar_imagem(img, x, y, w, h);
+                cortar_imagem(&img, posicao_x, posicao_y, nova_largura, nova_altura);
                 break;
             }
             default: {
