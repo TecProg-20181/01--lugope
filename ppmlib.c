@@ -1,5 +1,8 @@
 #include "ppmlib.h"
 
+/*
+*	Funções de comparação
+*/
 int max(int a, int b) {
     if (a > b){
         return a;
@@ -26,7 +29,9 @@ int pixel_igual(Pixel p1, Pixel p2) {
     return 0;
 }
 
-
+/*
+*	Funções para manipulação das imagens
+*/
 void escala_de_cinza(Image* imagem) {
     //Percorre todos os pixels da imagem
     for (unsigned int i = 0; i < imagem->h; ++i) {
@@ -53,15 +58,15 @@ void filtro_sepia(Image* imagem) {
             //Define tom sepia do pixel
             int cor_auxiliar = 0;
 
-            //Modifica vermelho
+            //Modifica o canal vermelho
             cor_auxiliar =  pixel.r * .393 + pixel.g * .769 + pixel.b * .189;
             cor_auxiliar = min(cor_auxiliar, 255);
             imagem->pixel[x][y].r = cor_auxiliar;
-            //Modifica verde
+            //Modifica o canal verde
             cor_auxiliar =  pixel.r * .349 + pixel.g * .686 + pixel.b * .168;
             cor_auxiliar = min(cor_auxiliar, 255);
             imagem->pixel[x][y].g = cor_auxiliar;
-            //Modifica azul
+            //Modifica o canal azul
             cor_auxiliar =  pixel.r * .272 + pixel.g * .534 + pixel.b * .131;
             cor_auxiliar = min(cor_auxiliar, 255);
             imagem->pixel[x][y].b = cor_auxiliar;
@@ -180,4 +185,44 @@ void cortar_imagem(Image* imagem, int x, int y, int nova_largura, int nova_altur
 
     //Define nova imagem
     *imagem = imagem_cortada;
+}
+
+/*
+* Funções para leitura/escrita de imagens PPM
+*/
+void lerImagem(Image *imagem){
+	// Lê o tipo da imagem
+    // char p3[4];
+    scanf("%s", imagem->tipo);
+
+    // Lê altura, largura e o a cor máxima da imagem
+    // int max_color;
+    scanf("%u %u %u", &imagem->w, &imagem->h, &imagem->cor_max);
+
+    // Lê todos os pixels da imagem
+    for (unsigned int i = 0; i < imagem->h; ++i) {
+        for (unsigned int j = 0; j < imagem->w; ++j) {
+            scanf("%hu %hu %hu", &imagem->pixel[i][j].r,
+                                 &imagem->pixel[i][j].g,
+                                 &imagem->pixel[i][j].b);
+        }
+    }
+}
+
+void escreverImagem(Image* imagem){
+	// print type of image
+    printf("P3\n");
+    // print width height and color of image
+    printf("%u %u\n255\n", imagem->w, imagem->h);
+
+    // print pixels of image
+    for (unsigned int i = 0; i < imagem->h; ++i) {
+        for (unsigned int j = 0; j < imagem->w; ++j) {
+            printf("%hu %hu %hu ", imagem->pixel[i][j].r,
+                                   imagem->pixel[i][j].g,
+                                   imagem->pixel[i][j].b);
+
+        }
+        printf("\n");
+    }
 }

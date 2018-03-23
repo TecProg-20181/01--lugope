@@ -15,4 +15,8 @@ typedef struct _image {
     Pixel pixel[512][512];
     unsigned int w; //Width
     unsigned int h; //Height
+
+    char tipo[4]; //Tipo da imagem
+    unsigned int cor_max; //maior valor da cor
+
 } Image;

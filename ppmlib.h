@@ -7,12 +7,21 @@
 #include <math.h>
 #include "structs.h"
 
+/*
+*	Funções de comparação
+*/
 // Retorna o maior número
 int max(int a, int b);
 
 // Retorna o menor número
 int min(int a, int b);
 
+// Verifica se os pixels são iguais
+int pixel_igual(Pixel p1, Pixel p2);
+
+/*
+*	Funções para manipulação das imagens
+*/
 // Adiciona um filtro preto e branco
 void escala_de_cinza(Image* imagem);
 
@@ -34,3 +43,11 @@ void inverter_cores(Image* imagem);
 // Corta imagem dentro da área determinada
 void cortar_imagem(Image* imagem, int x, int y, int nova_largura, int nova_altura);
 
+/*
+* Funções para leitura/escrita de imagens PPM
+*/
+//Carega uma imagem escolhida pelo usuário
+void lerImagem(Image* imagem);
+
+//Imprime o arquivo da imagem
+void escreverImagem(Image* imagem);

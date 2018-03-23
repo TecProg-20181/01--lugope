@@ -12,24 +12,9 @@ enum opcoes {ESCALA_CINZA = 1, FILTRO_SEPIA, BLUR, ROTACAO, ESPELHAMENTO, INVERS
 int main() {
     Image img;
 
-    // read type of image
-    char p3[4];
-    scanf("%s", p3);
+    lerImagem(&img);
 
-    // read width height and color of image
-    int max_color;
-    scanf("%u %u %d", &img.w, &img.h, &max_color);
-
-    // read all pixels of image
-    for (unsigned int i = 0; i < img.h; ++i) {
-        for (unsigned int j = 0; j < img.w; ++j) {
-            scanf("%hu %hu %hu", &img.pixel[i][j].r,
-                                 &img.pixel[i][j].g,
-                                 &img.pixel[i][j].b);
-
-        }
-    }
-
+    //Menu
     int n_opcoes;
     scanf("%d", &n_opcoes);
 
@@ -93,20 +78,7 @@ int main() {
 
     }
 
-    // print type of image
-    printf("P3\n");
-    // print width height and color of image
-    printf("%u %u\n255\n", img.w, img.h);
+    escreverImagem(&img);
 
-    // print pixels of image
-    for (unsigned int i = 0; i < img.h; ++i) {
-        for (unsigned int j = 0; j < img.w; ++j) {
-            printf("%hu %hu %hu ", img.pixel[i][j].r,
-                                   img.pixel[i][j].g,
-                                   img.pixel[i][j].b);
-
-        }
-        printf("\n");
-    }
     return 0;
 }
