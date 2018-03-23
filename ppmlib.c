@@ -21,14 +21,6 @@ int min(int a, int b) {
     }
 }
 
-int pixel_igual(Pixel p1, Pixel p2) {
-    if (p1.r == p2.r &&
-        p1.g == p2.g &&
-        p1.b == p2.b)
-        return 1;
-    return 0;
-}
-
 /*
 *	Funções para manipulação das imagens
 */

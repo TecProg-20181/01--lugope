@@ -16,9 +16,6 @@ int max(int a, int b);
 // Retorna o menor número
 int min(int a, int b);
 
-// Verifica se os pixels são iguais
-int pixel_igual(Pixel p1, Pixel p2);
-
 /*
 *	Funções para manipulação das imagens
 */
