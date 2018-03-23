@@ -71,17 +71,20 @@ void filtro_sepia(Image* imagem) {
             Pixel pixel = imagem->pixel[x][y];
 
             //Define tom sepia do pixel
-            int p =  pixel.r * .393 + pixel.g * .769 + pixel.b * .189;
-            int menor_r = (255 >  p) ? p : 255;
-            imagem->pixel[x][y].r = menor_r;
+            int cor_auxiliar = 0;
 
-            p =  pixel.r * .349 + pixel.g * .686 + pixel.b * .168;
-            menor_r = (255 >  p) ? p : 255;
-            imagem->pixel[x][y].g = menor_r;
-
-            p =  pixel.r * .272 + pixel.g * .534 + pixel.b * .131;
-            menor_r = (255 >  p) ? p : 255;
-            imagem->pixel[x][y].b = menor_r;
+            //Modifica vermelho
+            cor_auxiliar =  pixel.r * .393 + pixel.g * .769 + pixel.b * .189;
+            cor_auxiliar = min(cor_auxiliar, 255);
+            imagem->pixel[x][y].r = cor_auxiliar;
+            //Modifica verde
+            cor_auxiliar =  pixel.r * .349 + pixel.g * .686 + pixel.b * .168;
+            cor_auxiliar = min(cor_auxiliar, 255);
+            imagem->pixel[x][y].g = cor_auxiliar;
+            //Modifica azul
+            cor_auxiliar =  pixel.r * .272 + pixel.g * .534 + pixel.b * .131;
+            cor_auxiliar = min(cor_auxiliar, 255);
+            imagem->pixel[x][y].b = cor_auxiliar;
         }
     }
 }
@@ -114,9 +117,7 @@ void blur(Image* imagem, int diametro_blur) {
             media.b /= pow(diametro_blur,2);
 
             //Define nova cor do pixel como a média das cores na área do blur
-            imagem->pixel[linha][coluna].r = media.r;
-            imagem->pixel[linha][coluna].g = media.g;
-            imagem->pixel[linha][coluna].b = media.b;
+            imagem->pixel[linha][coluna] = media;
         }
     }
 }
