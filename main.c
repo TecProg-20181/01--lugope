@@ -101,14 +101,14 @@ void filtro_sepia(Image* imagem) {
     }
 }
 
-Image blur(Image imagem_blur, int diametro_blur) {
+void blur(Image* imagem, int diametro_blur) {
     // //Percorre cada pixel da imagem
-    for (unsigned int linha = 0; linha < imagem_blur.h; ++linha) {
-        for (unsigned int coluna = 0; coluna < imagem_blur.w; ++coluna) {
+    for (unsigned int linha = 0; linha < imagem->h; ++linha) {
+        for (unsigned int coluna = 0; coluna < imagem->w; ++coluna) {
             //Variáveis
             Pixel media = {0, 0, 0};
-            int h_anterior = imagem_blur.h - 1;
-            int w_anterior = imagem_blur.w - 1;
+            int h_anterior = imagem->h - 1;
+            int w_anterior = imagem->w - 1;
             int raio_blur = diametro_blur/2;
 
             int menor_h = min( h_anterior, (linha + raio_blur) ); //Evita passar da borda de baixo da imagem
@@ -117,9 +117,9 @@ Image blur(Image imagem_blur, int diametro_blur) {
             //Faz as somm das cores dos pixels no primeiro quadrante do pixel base
             for(int y = max(0, linha - raio_blur); y <= menor_h; ++y) {
                 for(int x = max(0, coluna - raio_blur); x <= menor_w; ++x) {
-                    media.r += imagem_blur.pixel[y][x].r;
-                    media.g += imagem_blur.pixel[y][x].g;
-                    media.b += imagem_blur.pixel[y][x].b;
+                    media.r += imagem->pixel[y][x].r;
+                    media.g += imagem->pixel[y][x].g;
+                    media.b += imagem->pixel[y][x].b;
                 }
             }
 
@@ -129,31 +129,28 @@ Image blur(Image imagem_blur, int diametro_blur) {
             media.b /= pow(diametro_blur,2);
 
             //Define nova cor do pixel como a média das cores na área do blur
-            imagem_blur.pixel[linha][coluna].r = media.r;
-            imagem_blur.pixel[linha][coluna].g = media.g;
-            imagem_blur.pixel[linha][coluna].b = media.b;
+            imagem->pixel[linha][coluna].r = media.r;
+            imagem->pixel[linha][coluna].g = media.g;
+            imagem->pixel[linha][coluna].b = media.b;
+        }
+    }
+}
+
+void rotacionar90direita(Image* imagem) {
+    Image img_auxiliar = *imagem;
+
+    img_auxiliar.w = imagem->h;
+    img_auxiliar.h = imagem->w;
+
+    for (unsigned int i = 0, y = 0; i < img_auxiliar.h; ++i, ++y) {
+        for (int j = img_auxiliar.w - 1, x = 0; j >= 0; --j, ++x) {
+            img_auxiliar.pixel[i][j].r = imagem->pixel[x][y].r;
+            img_auxiliar.pixel[i][j].g = imagem->pixel[x][y].g;
+            img_auxiliar.pixel[i][j].b = imagem->pixel[x][y].b;
         }
     }
 
-    return imagem_blur;
-
-}
-
-Image rotacionar90direita(Image img) {
-    // Image* nova_imagem = NULL;
-
-    // nova_imagem.w = img.h;
-    // nova_imagem.h = img.w;
-
-    // for (unsigned int i = 0, y = 0; i < nova_imagem.h; ++i, ++y) {
-    //     for (int j = nova_imagem.w - 1, x = 0; j >= 0; --j, ++x) {
-    //         nova_imagem.pixel[i][j].r = img.pixel[x][y].r;
-    //         nova_imagem.pixel[i][j].g = img.pixel[x][y].g;
-    //         nova_imagem.pixel[i][j].b = img.pixel[x][y].b;
-    //     }
-    // }
-
-    return img;
+    *imagem = img_auxiliar;
 }
 
 // void inverter_cores(unsigned short int pixel[512][512][3],
@@ -224,32 +221,24 @@ int main() {
                 break;
             }
             case 3: { // Blur
-                // int tamanho = 0;
-                // scanf("%d", &tamanho);
-                // img = blur(img, tamanho);
+                int tamanho = 0;
+                scanf("%d", &tamanho);
+                blur(&img, tamanho);
 
                 break;
             }
             case 4: { // Rotacao
-                // int quantas_vezes = 0;
-                // scanf("%d", &quantas_vezes);
-                // quantas_vezes %= 4;
-
-                // for (int j = 0; j < quantas_vezes; ++j) {
-                //     img = rotacionar90direita(img);
-                // }
-
-                break;
-            }
-            case 5: { // Espelhamento
                 int quantas_vezes = 0;
                 scanf("%d", &quantas_vezes);
                 quantas_vezes %= 4;
 
                 for (int j = 0; j < quantas_vezes; ++j) {
-                    img = rotacionar90direita(img);
+                    rotacionar90direita(&img);
                 }
 
+                break;
+            }
+            case 5: { // Espelhamento
                 // int horizontal = 0;
                 // scanf("%d", &horizontal);
 
