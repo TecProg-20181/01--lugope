@@ -1,7 +1,13 @@
 // teste: cat lena.ppm entrada.txt | ./Photopobre.exe > saida.ppm
-
+/*
+*   Lucas Gomes Pereira
+*   13/0013242
+*/ 
 
 #include "ppmlib.h"
+
+//Código das ações
+enum opcoes {ESCALA_CINZA = 1, FILTRO_SEPIA, BLUR, ROTACAO, ESPELHAMENTO, INVERSAO_CORES, CORTAR_IMAGEM};
 
 int main() {
     Image img;
@@ -32,24 +38,24 @@ int main() {
         scanf("%d", &opcao);
 
         switch(opcao) {
-            case 1: { // Escala de Cinza
+            case ESCALA_CINZA: { // Escala de Cinza
                 escala_de_cinza(&img);
 
                 break;
             }
-            case 2: { // Filtro Sepia
+            case FILTRO_SEPIA: { // Filtro Sepia
                 filtro_sepia(&img);
 
                 break;
             }
-            case 3: { // Blur
+            case BLUR: { // Blur
                 int tamanho = 0;
                 scanf("%d", &tamanho);
                 blur(&img, tamanho);
 
                 break;
             }
-            case 4: { // Rotacao
+            case ROTACAO: { // Rotacao
                 int quantas_vezes = 0;
                 scanf("%d", &quantas_vezes);
                 quantas_vezes %= 4;
@@ -60,18 +66,18 @@ int main() {
 
                 break;
             }
-            case 5: { // Espelhamento
+            case ESPELHAMENTO: { // Espelhamento
                 unsigned short int eixo = 0;
                 scanf("%hu", &eixo);
                 espelhar(&img, eixo);
 
                 break;
             }
-            case 6: { // Inversao de Cores
+            case INVERSAO_CORES: { // Inversao de Cores
                 inverter_cores(&img);
                 break;
             }
-            case 7: { // Cortar Imagem
+            case CORTAR_IMAGEM: { // Cortar Imagem
                 int posicao_x, posicao_y;
                 scanf("%d %d", &posicao_x, &posicao_y);
                 int nova_largura, nova_altura;

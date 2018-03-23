@@ -1,3 +1,8 @@
+/*
+*   Lucas Gomes Pereira
+*   13/0013242
+*/ 
+
 #include <stdio.h>
 #include <math.h>
 #include "structs.h"

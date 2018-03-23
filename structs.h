@@ -1,3 +1,8 @@
+/*
+*   Lucas Gomes Pereira
+*   13/0013242
+*/ 
+
 //Pixel with RGB channels
 typedef struct _pixel {
     unsigned short int r; //Red
